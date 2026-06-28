@@ -38,6 +38,8 @@ project-root/
 │   └── functions/            # Edge Functions (Deno) - נפרסות דרך הדאשבורד
 │       ├── telegram-webhook/index.ts   # webhook: /start <code> -> שמירת chat_id
 │       └── send-telegram/index.ts      # שליחת פריטי היום למשתמש המחובר
+├── .github/workflows/
+│   └── deploy-pages.yml      # פריסה אוטומטית ל-GitHub Pages (מ-src/)
 ├── Kingdom_of_Claudes_Beloved_MDs/   # מסמכי פירוט
 ├── TECHNICAL.md
 └── README.md
@@ -59,6 +61,9 @@ project-root/
 
 **טלגרם** — חיבור חשבון טלגרם בלחיצה (deep link + webhook) ושליחת תזכורות. שתי Edge Functions, חיבור דרך לשונית הגדרות.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/TELEGRAM.md`
+
+**פריסה** — הפרונטאנד מתפרסם ל-GitHub Pages דרך GitHub Actions; config.js נוצר בבנייה ממשתני-ריפו. כתובת חיה: https://tzudbadichi.github.io/kids-reminders/
+> פירוט: `Kingdom_of_Claudes_Beloved_MDs/DEPLOY.md`
 
 ## קונפיגורציה וסביבה
 

@@ -13,9 +13,17 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger send-morning
+      - name: Trigger send-morning (Telegram)
         run: |
           curl -fsS -X POST \
             "https://ylylrwkazfbbqbilbdoq.supabase.co/functions/v1/send-morning" \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json"
+
+      - name: Trigger send-push (Web Push)
+        if: ${{ always() }}
+        run: |
+          curl -fsS -X POST \
+            "https://ylylrwkazfbbqbilbdoq.supabase.co/functions/v1/send-push" \
             -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json"

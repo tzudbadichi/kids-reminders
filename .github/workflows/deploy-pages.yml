@@ -35,11 +35,13 @@ jobs:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
           TELEGRAM_BOT_USERNAME: ${{ vars.TELEGRAM_BOT_USERNAME }}
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
         run: |
           cat > src/config.js <<EOF
           export const SUPABASE_URL = "${SUPABASE_URL}";
           export const SUPABASE_ANON_KEY = "${SUPABASE_ANON_KEY}";
           export const TELEGRAM_BOT_USERNAME = "${TELEGRAM_BOT_USERNAME}";
+          export const VAPID_PUBLIC_KEY = "${VAPID_PUBLIC_KEY}";
           EOF
 
       - name: Configure Pages

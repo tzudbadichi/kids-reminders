@@ -2,6 +2,7 @@
 
 import { getSupabase } from "./supabaseClient.js";
 import { el, clear, toast } from "./ui.js";
+import { pushSupported, currentPushSubscription, enablePush, disablePush } from "./push.js";
 
 // Read the optional Telegram bot username from config.js (public value).
 async function botUsername() {
@@ -54,8 +55,59 @@ export async function renderSettings(container) {
     el("label", { class: "lbl" }, "שעת התראה יומית"), time,
     el("button", { class: "btn primary", onClick: save }, "שמירה"),
     await renderTelegram(container, supabase, user, profile),
+    await renderPush(container),
     el("p", { class: "muted" }, "כל השעות לפי שעון ישראל."),
   );
+}
+
+// Web Push section: enable/disable browser notifications on this device.
+async function renderPush(container) {
+  const wrap = el("div", { class: "note-box" });
+  wrap.append(el("div", { class: "section-title" }, "התראות בדפדפן"));
+
+  if (!pushSupported()) {
+    wrap.append(el("p", { class: "muted" },
+      "הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להוסיף את האפליקציה למסך הבית."));
+    return wrap;
+  }
+
+  let sub = null;
+  try { sub = await currentPushSubscription(); } catch (_) { /* ignore */ }
+
+  if (sub) {
+    wrap.append(
+      el("p", { class: "ok-text" }, "מופעל במכשיר הזה."),
+      el("div", { class: "row gap", style: "margin-top:10px" },
+        el("button", { class: "btn", onClick: disable }, "כיבוי")),
+    );
+    async function disable() {
+      try { await disablePush(); toast("התראות הדפדפן כובו"); renderSettings(container); }
+      catch (e) { toast("שגיאה: " + (e.message || e), "error"); }
+    }
+  } else {
+    const btn = el("button", { class: "btn primary", onClick: enable }, "הפעל התראות בדפדפן");
+    wrap.append(
+      el("p", {}, "קבל/י את תזכורות הבוקר גם כהתראה במכשיר הזה."),
+      el("div", { class: "row gap", style: "margin-top:10px" }, btn),
+    );
+    async function enable() {
+      btn.disabled = true;
+      try {
+        await enablePush();
+        toast("התראות הדפדפן הופעלו");
+        renderSettings(container);
+      } catch (e) {
+        const m = e.message === "denied" ? "ההרשאה נדחתה. אפשר לאשר בהגדרות הדפדפן."
+          : e.message === "no_vapid" ? "Web Push לא הוגדר (חסר VAPID)."
+          : e.message === "unsupported" ? "הדפדפן לא תומך בהתראות."
+          : "שגיאה: " + (e.message || e);
+        toast(m, "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  }
+  return wrap;
 }
 
 // Telegram section. Three states based on the profile:

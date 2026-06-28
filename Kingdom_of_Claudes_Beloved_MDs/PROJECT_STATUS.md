@@ -54,14 +54,13 @@
 - פאזה 5 (תזמון בוקר): **בוצע** - `send-morning` פרוס (Verify JWT OFF, סוד `CRON_SECRET` מוגדר), workflow `morning-notify.yml` רץ ונבדק (ירוק), ושליחה אמיתית אומתה. פירוט ב-`SCHEDULING.md`.
 - פאזה 3 (חילוץ AI): **בוצע** - `extract-items` פרוס עם `gemini-2.5-flash` (thinking כבוי + responseSchema), נבדק ומחלץ נכון בעברית ובאנגלית. פירוט ב-`AI.md`.
 - פאזה 6 (פריסה ל-GitHub Pages): **בוצע** - האפליקציה חיה ב-https://tzudbadichi.github.io/kids-reminders/ דרך GitHub Actions (config.js נוצר בבנייה ממשתני-ריפו). פירוט ב-`DEPLOY.md`.
-- פאזה 4ב (Web Push): **ממתין** (אופציונלי; טלגרם כבר מכסה התראות).
-- ליטוש PWA (אייקונים): **ממתין**.
+- פאזה 4ב (Web Push): קוד נכתב (`push.js`, `send-push`, מקטע הגדרות, מפתחות VAPID). **ממתין לפריסת `send-push` + סודות VAPID.** פירוט ב-`WEBPUSH.md`.
+- ליטוש PWA (אייקונים): **בוצע** - אייקונים נוצרו (`scripts/generate-icons.mjs`) ומחוברים ל-manifest ול-index.html.
 
 ## הצעד הבא המיידי
-**כל הפיצ'רים המרכזיים עובדים מקצה לקצה בפרודקשן**: התחברות בשם משתמש, עיצוב מובייל, ניהול ילדים ותזכורות, התראת טלגרם אוטומטית כל בוקר (cron), חילוץ AI עם Gemini, והכל פרוס ב-GitHub Pages. נותר רק אופציונלי/ליטוש:
-1. **Web Push (פאזה 4ב)** - ערוץ התראות שני; טלגרם כבר מכסה, עדיפות נמוכה.
-2. **אייקוני PWA** - כרגע `manifest.webmanifest` עם `icons: []`; להוסיף אייקונים לחוויית התקנה מלאה.
-3. ניקוי: נוצרו משתמשי בדיקה `aitest...@kids-reminders.app` ב-Auth במהלך אבחון - אפשר למחוק ב-Authentication -> Users.
+**כל הפיצ'רים עובדים בפרודקשן**: התחברות בשם משתמש, עיצוב מובייל, אייקוני PWA, ניהול ילדים ותזכורות, התראת טלגרם אוטומטית כל בוקר (cron), חילוץ AI עם Gemini, והכל פרוס ב-GitHub Pages.
+- **Web Push (פאזה 4ב)**: קוד נכתב (`push.js`, `send-push`, מקטע בהגדרות, step ב-cron, מפתחות VAPID). **ממתין לפריסת `send-push` בדאשבורד + הסודות `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY`.** פירוט ב-`WEBPUSH.md`. נבדק מהדפדפן בלבד.
+- ניקוי אופציונלי: נוצרו משתמשי בדיקה `aitest...@kids-reminders.app` ב-Auth במהלך אבחון ה-AI - אפשר למחוק ב-Authentication -> Users.
 
 ## איך להמשיך את הסשן
 קרא את `TECHNICAL.md` ואת המסמך הזה. נכון לעכשיו: הליבה בנויה ונדחפה לריפו, וממתינים למפתחות Supabase + Gemini להרצה ראשונה. המשך מהצעד המיידי הראשון שטרם בוצע.

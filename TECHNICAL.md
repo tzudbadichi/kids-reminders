@@ -104,4 +104,4 @@ project-root/
 | `@supabase/supabase-js@2` | לקוח Supabase (נטען מ-esm.sh, ללא שלב build) |
 
 ## מצב פיתוח
-**כל הפיצ'רים חיים בפרודקשן**: התחברות בשם משתמש, עיצוב מובייל, אייקוני PWA, ניהול ילדים ותזכורות, התראת טלגרם אוטומטית כל בוקר (GitHub Actions cron שגם שומר את Supabase ער), חילוץ AI עם Gemini, והכל פרוס ב-GitHub Pages. Web Push: הקוד נכתב וממתין לפריסת `send-push` + סודות VAPID. לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.
+**כל הפיצ'רים חיים ונבדקו בפרודקשן**: התחברות בשם משתמש, עיצוב מובייל, אייקוני PWA, ניהול ילדים ותזכורות, התראת טלגרם אוטומטית כל בוקר (GitHub Actions cron שגם שומר את Supabase ער), Web Push, חילוץ AI עם Gemini, והכל פרוס ב-GitHub Pages. לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.

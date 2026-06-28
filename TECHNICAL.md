@@ -2,6 +2,8 @@
 
 אפליקציית PWA לניהול תזכורות יומיות לילדים (מה להביא לגן/בית ספר), עם זיהוי AI אופציונלי והתראת בוקר.
 
+> **ממשיכים את העבודה?** קרא קודם את `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md` - שם כל ההכרעות, הנימוקים, מצב הבנייה, והצעד הבא. מסמך זה (TECHNICAL.md) הוא מפת המערכת.
+
 ## סקירת ארכיטקטורה
 
 פרונטאנד סטטי (PWA) מדבר ישירות מול Supabase (מסד נתונים + התחברות), עם הגנת Row-Level Security כך שכל משתמש רואה רק את הנתונים שלו. חילוץ ה-AI וההתראות (בשלבים הבאים) ירוצו כפונקציות צד-שרת ב-Supabase כדי להחביא מפתחות.
@@ -38,6 +40,9 @@ project-root/
 
 ## אינדקס רכיבים
 
+**מצב הפרויקט וההכרעות** — נקודת ההמשך לעבודה: מצב נוכחי, כל ההכרעות והנימוקים, שלבי הבנייה, והצעד הבא.
+> פירוט: `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`
+
 **מסד הנתונים** — טבלאות profiles, children, reminders, push_subscriptions, notification_log, עם RLS לכל משתמש וטריגר ליצירת פרופיל אוטומטית.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/DATABASE.md`
 
@@ -63,4 +68,4 @@ project-root/
 | `@supabase/supabase-js@2` | לקוח Supabase (נטען מ-esm.sh, ללא שלב build) |
 
 ## מצב פיתוח
-הליבה הושלמה. בשלבים הבאים: חילוץ AI (Edge Function + Gemini), Web Push, בוט טלגרם, ותזמון בוקר (pg_cron).
+הליבה הושלמה. בשלבים הבאים: חילוץ AI (Edge Function + Gemini), Web Push, בוט טלגרם, ותזמון בוקר דרך GitHub Actions (טריגר חיצוני יומי שמפעיל Edge Function; גם שומר את פרויקט ה-Supabase ער במסלול החינמי). לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.

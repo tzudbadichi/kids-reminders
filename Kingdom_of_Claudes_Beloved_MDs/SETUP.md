@@ -25,5 +25,5 @@
 ## שלבים הבאים (לא בליבה)
 - חילוץ AI: Edge Function `extract-items` עם מפתח Gemini.
 - Web Push + בוט טלגרם.
-- תזמון בוקר עם pg_cron.
+- תזמון בוקר עם GitHub Actions (טריגר חיצוני יומי; גם מונע השהיית הפרויקט במסלול החינמי של Supabase).
 - פריסה ל-GitHub Pages.

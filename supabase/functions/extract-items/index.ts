@@ -65,6 +65,9 @@ ${text}`;
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0,
+        // Disable "thinking" on gemini-2.5 models - with structured output enabled,
+        // thinking can consume the budget and return the empty schema default.
+        thinkingConfig: { thinkingBudget: 0 },
         responseMimeType: "application/json",
         responseSchema: {
           type: "OBJECT",

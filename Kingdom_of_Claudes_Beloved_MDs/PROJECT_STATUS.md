@@ -42,7 +42,7 @@
    נימוק: חוויה פשוטה להורים, בלי אישור מייל. Supabase דורש email כמזהה, ולכן בונים email פנימי `<username>@kids-reminders.app` שהמשתמש לא רואה. דורש "Confirm email" כבוי. שם המשתמש מוגבל ל-ASCII כי החלק שלפני ה-`@` לא יכול להכיל עברית.
    נדחה: התחברות באימייל (דורש אישור מייל, מסורבל), עברית בשם המשתמש (בעיית פורמט email).
 
-8. **לא לקשר את Supabase ל-GitHub.** דיפלוי Edge Functions דרך Supabase CLI.
+8. **לא לקשר את Supabase ל-GitHub.** דיפלוי Edge Functions דרך הדאשבורד של Supabase (עורך מובנה; אין CLI/Deno מותקנים מקומית). הקוד נשמר במאגר תחת `supabase/functions/` כמקור אמת ומודבק לדאשבורד. כל פונקציה ציבורית (webhook/cron) עם **Verify JWT OFF** ואימות secret בקוד.
    נימוק: Branching בתשלום והאינטגרציה מניחה workflow של migrations שאין לנו (schema.sql יחיד). ה-cron של פאזה 5 הוא GitHub Action שקורא ל-Edge Function ב-HTTP - נפרד ובסדר.
 
 ## מבנה הנתונים
@@ -51,9 +51,9 @@
 ## שלבי בנייה
 - פאזה 1-2 (ליבה): **בוצע** מקומית - צריך הרצה ראשונה מול Supabase חי.
 - פאזה 4 (טלגרם): **בוצע** - הבוט `KidsReminderBot` נוצר, שתי הפונקציות פרוסות בדאשבורד (`telegram-webhook` ציבורית עם אימות secret, `send-telegram`), ה-webhook רשום, והחיבור + "שלח התראת בדיקה" נבדקו בהצלחה. פירוט ב-`TELEGRAM.md`.
-- פאזה 5 (תזמון בוקר): **ממתין** - צריך פונקציית שליחה אצווה (לולאה על כל המשתמשים לפי `notification_time`) + GitHub Actions cron יומי שמפעיל אותה. כרגע קיימת רק שליחה ידנית למשתמש המחובר.
+- פאזה 5 (תזמון בוקר): קוד נכתב - `send-morning` (שליחה אצווה עם catch-up) + workflow `morning-notify.yml` (cron כל 15 דק'). **ממתין לפריסת הפונקציה בדאשבורד + הסוד `CRON_SECRET`.** פירוט ב-`SCHEDULING.md`.
+- פאזה 3 (חילוץ AI): קוד נכתב - `extract-items` עם Gemini. **ממתין לפריסה + מפתח `GEMINI_API_KEY`.** פירוט ב-`AI.md`.
 - פאזה 6 (פריסה ל-GitHub Pages): **בוצע** - האפליקציה חיה ב-https://tzudbadichi.github.io/kids-reminders/ דרך GitHub Actions (config.js נוצר בבנייה ממשתני-ריפו). פירוט ב-`DEPLOY.md`.
-- פאזה 3 (חילוץ AI): Edge Function `extract-items` עם מפתח Gemini - **ממתין** (אופציונלי; ההזנה הידנית עובדת).
 - פאזה 4ב (Web Push): **ממתין** (אופציונלי; טלגרם כבר מכסה התראות).
 - ליטוש PWA (אייקונים): **ממתין**.
 

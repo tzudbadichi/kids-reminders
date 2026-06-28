@@ -1,0 +1,21 @@
+name: Morning notifications
+
+# Triggers the send-morning Edge Function on a schedule. The function decides who
+# is due (Israel time) and sends via Telegram, once per day per user. Running every
+# 15 minutes also keeps the free-tier Supabase project from pausing.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger send-morning
+        run: |
+          curl -fsS -X POST \
+            "https://ylylrwkazfbbqbilbdoq.supabase.co/functions/v1/send-morning" \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json"

@@ -37,9 +37,12 @@ project-root/
 │   ├── telegram.sql          # מיגרציה: telegram_link_code ל-DB קיים
 │   └── functions/            # Edge Functions (Deno) - נפרסות דרך הדאשבורד
 │       ├── telegram-webhook/index.ts   # webhook: /start <code> -> שמירת chat_id
-│       └── send-telegram/index.ts      # שליחת פריטי היום למשתמש המחובר
+│       ├── send-telegram/index.ts      # שליחת פריטי היום למשתמש המחובר (בדיקה)
+│       ├── send-morning/index.ts       # שליחת אצווה יומית (cron)
+│       └── extract-items/index.ts      # חילוץ פריטים עם Gemini
 ├── .github/workflows/
-│   └── deploy-pages.yml      # פריסה אוטומטית ל-GitHub Pages (מ-src/)
+│   ├── deploy-pages.yml      # פריסה אוטומטית ל-GitHub Pages (מ-src/)
+│   └── morning-notify.yml    # cron יומי שמפעיל את send-morning
 ├── Kingdom_of_Claudes_Beloved_MDs/   # מסמכי פירוט
 ├── TECHNICAL.md
 └── README.md
@@ -62,6 +65,12 @@ project-root/
 **טלגרם** — חיבור חשבון טלגרם בלחיצה (deep link + webhook) ושליחת תזכורות. שתי Edge Functions, חיבור דרך לשונית הגדרות.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/TELEGRAM.md`
 
+**תזמון התראות** — שליחת בוקר אוטומטית: פונקציית אצווה `send-morning` שמופעלת ב-GitHub Actions cron כל 15 דקות, עם לוגיקת catch-up ומניעת כפילויות.
+> פירוט: `Kingdom_of_Claudes_Beloved_MDs/SCHEDULING.md`
+
+**חילוץ AI** — Edge Function `extract-items` שמחלץ פריטים מהודעת ווצאפ עם Google Gemini (אופציונלי).
+> פירוט: `Kingdom_of_Claudes_Beloved_MDs/AI.md`
+
 **פריסה** — הפרונטאנד מתפרסם ל-GitHub Pages דרך GitHub Actions; config.js נוצר בבנייה ממשתני-ריפו. כתובת חיה: https://tzudbadichi.github.io/kids-reminders/
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/DEPLOY.md`
 
@@ -75,7 +84,10 @@ project-root/
 | `TELEGRAM_BOT_USERNAME` | `src/config.js` | ציבורי, לקישור החיבור |
 | `TELEGRAM_BOT_TOKEN` | Supabase Edge Functions Secret | סודי, לא בדפדפן |
 | `TELEGRAM_WEBHOOK_SECRET` | Supabase Edge Functions Secret | אימות קריאות ה-webhook |
-| מפתח Gemini | Edge Function (שלב הבא) | לא בדפדפן |
+| `CRON_SECRET` | Supabase Secret + GitHub Secret | אימות שה-cron בלבד מפעיל את send-morning |
+| `GEMINI_API_KEY` | Supabase Edge Functions Secret | סודי, ל-extract-items |
+| `GEMINI_MODEL` | Supabase Secret (אופציונלי) | ברירת מחדל gemini-2.0-flash |
+| `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `TELEGRAM_BOT_USERNAME` | GitHub Repository Variables | מהם נוצר config.js בפריסה |
 
 ## תלויות
 

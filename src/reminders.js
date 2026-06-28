@@ -1,7 +1,7 @@
 // Reminders: data access, the "add reminder" view, and the "what to bring" view.
 
 import { getSupabase } from "./supabaseClient.js";
-import { el, clear, toast } from "./ui.js";
+import { el, clear, toast, avatar } from "./ui.js";
 import { listChildren } from "./children.js";
 import { extractItems, normalizeAi } from "./ai.js";
 
@@ -180,7 +180,10 @@ export async function renderToday(container) {
       const childName = r.children ? r.children.name : "";
       listWrap.append(
         el("div", { class: "card-row" },
-          el("div", { class: "child-name" }, childName),
+          el("div", { class: "card-head" },
+            avatar(childName, r.child_id),
+            el("div", { class: "child-name" }, childName),
+          ),
           el("ul", { class: "items" },
             ...(r.items || []).map((it) => el("li", {}, it))),
         ),

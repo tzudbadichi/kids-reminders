@@ -7,8 +7,12 @@ create table if not exists public.profiles (
   display_name text,
   notification_time time not null default '06:30',
   telegram_chat_id text,
+  telegram_link_code text,
   created_at timestamptz not null default now()
 );
+create unique index if not exists profiles_telegram_link_code_idx
+  on public.profiles(telegram_link_code)
+  where telegram_link_code is not null;
 
 -- Children
 create table if not exists public.children (

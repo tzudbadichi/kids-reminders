@@ -1,6 +1,6 @@
 // Service worker: offline shell cache plus web-push handlers (used in a later phase).
 
-const CACHE = "kids-reminders-v1";
+const CACHE = "kids-reminders-v2";
 const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

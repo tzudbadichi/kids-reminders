@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+# Publishes the static app in src/ to GitHub Pages. config.js is generated here
+# from repository Variables (not committed), so the source stays free of config.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate config.js from repository variables
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          TELEGRAM_BOT_USERNAME: ${{ vars.TELEGRAM_BOT_USERNAME }}
+        run: |
+          cat > src/config.js <<EOF
+          export const SUPABASE_URL = "${SUPABASE_URL}";
+          export const SUPABASE_ANON_KEY = "${SUPABASE_ANON_KEY}";
+          export const TELEGRAM_BOT_USERNAME = "${TELEGRAM_BOT_USERNAME}";
+          EOF
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (src/)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: src
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

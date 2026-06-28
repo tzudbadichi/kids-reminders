@@ -1,6 +1,6 @@
 // App controller: boots the app, handles auth gating, and switches between views.
 
-import { el, clear } from "./ui.js";
+import { el, clear, icon } from "./ui.js";
 import { getSupabase } from "./supabaseClient.js";
 import { getSession, signOut, renderAuth } from "./auth.js";
 import { renderToday, renderAdd } from "./reminders.js";
@@ -10,10 +10,10 @@ import { renderSettings } from "./settings.js";
 const app = document.getElementById("app");
 
 const views = {
-  today: { label: "היום", render: renderToday },
-  add: { label: "הוספה", render: renderAdd },
-  children: { label: "ילדים", render: renderChildren },
-  settings: { label: "הגדרות", render: renderSettings },
+  today: { label: "היום", icon: "today", render: renderToday },
+  add: { label: "הוספה", icon: "add", render: renderAdd },
+  children: { label: "ילדים", icon: "kids", render: renderChildren },
+  settings: { label: "הגדרות", icon: "settings", render: renderSettings },
 };
 
 async function boot() {
@@ -53,30 +53,35 @@ function renderFatal(e) {
 function renderShell() {
   clear(app);
   const content = el("main", { id: "content" });
-  const nav = el("nav", { class: "tabs" });
+  const nav = el("nav", { class: "tabbar" });
+  const logoutBtn = el("button", {
+    class: "icon-btn", "aria-label": "התנתקות", title: "התנתקות",
+    onClick: async () => { await signOut(); boot(); },
+  }, icon("logout"));
   const header = el("header", { class: "topbar" },
     el("span", { class: "brand" }, "תזכורות לילדים"),
-    el("button", {
-      class: "link-btn",
-      onClick: async () => { await signOut(); boot(); },
-    }, "התנתקות"),
+    logoutBtn,
   );
 
   const tabButtons = {};
   function go(key) {
     for (const k in tabButtons) tabButtons[k].classList.toggle("active", k === key);
+    window.scrollTo(0, 0);
     views[key].render(content).catch((e) => {
       clear(content);
       content.append(el("div", { class: "error" }, "שגיאה: " + (e.message || e)));
     });
   }
   for (const [key, view] of Object.entries(views)) {
-    const button = el("button", { class: "tab", onClick: () => go(key) }, view.label);
+    const button = el("button", { class: "tab", onClick: () => go(key) },
+      icon(view.icon),
+      el("span", { class: "tab-label" }, view.label),
+    );
     tabButtons[key] = button;
     nav.append(button);
   }
 
-  app.append(header, nav, content);
+  app.append(header, content, nav);
   go("today");
 }
 

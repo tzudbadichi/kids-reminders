@@ -4,7 +4,7 @@
 
 ## טבלאות
 
-- **profiles** — שורה אחת לכל משתמש מאומת. `id` (=auth user), `display_name`, `notification_time` (ברירת מחדל 06:30, שעון ישראל), `telegram_chat_id` (לשלב הטלגרם), `created_at`.
+- **profiles** — שורה אחת לכל משתמש מאומת. `id` (=auth user), `display_name`, `notification_time` (ברירת מחדל 06:30, שעון ישראל), `telegram_chat_id` (chat מחובר), `telegram_link_code` (קוד חד-פעמי לחיבור טלגרם, מאופס אחרי החיבור; אינדקס ייחודי חלקי), `created_at`.
 - **children** — `id`, `user_id`, `name`, `color`, `created_at`.
 - **reminders** — `id`, `user_id`, `child_id`, `due_date`, `items` (jsonb, מערך מחרוזות), `source_text` (טקסט הווצאפ המקורי, אופציונלי), `created_at`.
 - **push_subscriptions** — לשלב Web Push: `endpoint`, `p256dh`, `auth` לכל מכשיר.
@@ -16,7 +16,7 @@ RLS מופעל על כל הטבלאות. לכל טבלה מדיניות יחיד
 
 ## טריגר יצירת פרופיל
 
-הפונקציה `handle_new_user` (security definer) יוצרת שורת `profiles` אוטומטית בעת הרשמת משתמש חדש, עם שם תצוגה ברירת מחדל מתוך האימייל. מופעלת בטריגר `on_auth_user_created` על `auth.users`.
+הפונקציה `handle_new_user` (security definer) יוצרת שורת `profiles` אוטומטית בעת הרשמת משתמש חדש, עם שם תצוגה ברירת מחדל. ההתחברות היא בשם משתמש, והאפליקציה בונה email פנימי בצורת `<username>@kids-reminders.app`; הטריגר לוקח את שם התצוגה מ-`display_name` שנשלח בהרשמה (ובהיעדרו מהחלק שלפני ה-`@`), כך ששם התצוגה ההתחלתי שווה לשם המשתמש. מופעלת בטריגר `on_auth_user_created` על `auth.users`. דורש ש-"Confirm email" יהיה כבוי ב-Supabase Auth.
 
 ## הערות
 - `items` נשמר כ-jsonb לפשטות. אפשר בעתיד לנרמל לטבלת פריטים נפרדת אם נרצה סימון "בוצע" לכל פריט.

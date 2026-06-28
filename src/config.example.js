@@ -4,3 +4,7 @@
 
 export const SUPABASE_URL = "https://YOUR-PROJECT-ref.supabase.co";
 export const SUPABASE_ANON_KEY = "YOUR-PUBLIC-ANON-KEY";
+
+// Optional - only for the Telegram feature. The bot's public username (without @),
+// as chosen in BotFather. Used to build the "connect Telegram" deep link.
+export const TELEGRAM_BOT_USERNAME = "";

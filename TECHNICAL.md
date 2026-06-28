@@ -22,8 +22,9 @@ project-root/
 │   ├── index.html            # מעטפת האפליקציה (RTL, עברית)
 │   ├── styles.css            # עיצוב
 │   ├── app.js                # בקר ראשי: אתחול, ניתוב בין מסכים, גייטינג התחברות
-│   ├── supabaseClient.js     # יצירת לקוח Supabase (טוען config.js)
-│   ├── auth.js               # התחברות/הרשמה/התנתקות
+│   ├── supabaseClient.js     # יצירת לקוח Supabase (טוען config.js, שומר סשן במכשיר)
+│   ├── auth.js               # התחברות בשם משתמש + סיסמה (email פנימי מסונתז)
+│   ├── ui.js                 # עזרי DOM: el/clear/toast, אייקוני SVG, אווטארים צבעוניים
 │   ├── children.js           # ניהול ילדים (נתונים + מסך)
 │   ├── reminders.js          # תזכורות: הוספה + תצוגת "מה צריך להביא"
 │   ├── ai.js                 # חילוץ AI אופציונלי (קורא ל-Edge Function)
@@ -32,7 +33,11 @@ project-root/
 │   ├── sw.js                 # service worker (מטמון + push לעתיד)
 │   └── config.example.js     # תבנית לקונפיגורציה (להעתיק ל-config.js)
 ├── supabase/
-│   └── schema.sql            # טבלאות + RLS + טריגר יצירת פרופיל
+│   ├── schema.sql            # טבלאות + RLS + טריגר יצירת פרופיל
+│   ├── telegram.sql          # מיגרציה: telegram_link_code ל-DB קיים
+│   └── functions/            # Edge Functions (Deno) - נפרסות דרך הדאשבורד
+│       ├── telegram-webhook/index.ts   # webhook: /start <code> -> שמירת chat_id
+│       └── send-telegram/index.ts      # שליחת פריטי היום למשתמש המחובר
 ├── Kingdom_of_Claudes_Beloved_MDs/   # מסמכי פירוט
 ├── TECHNICAL.md
 └── README.md
@@ -46,20 +51,26 @@ project-root/
 **מסד הנתונים** — טבלאות profiles, children, reminders, push_subscriptions, notification_log, עם RLS לכל משתמש וטריגר ליצירת פרופיל אוטומטית.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/DATABASE.md`
 
-**הפרונטאנד** — PWA בעברית: התחברות, ניהול ילדים, הוספת תזכורת (ידני + AI אופציונלי), ותצוגת היום. בקר ניתוב פשוט ב-app.js.
+**הפרונטאנד** — PWA בעברית מובייל-פירסט (ניווט תחתון, אווטארים): התחברות בשם משתמש, ניהול ילדים, הוספת תזכורת (ידני + AI אופציונלי), ותצוגת היום. הסשן נשמר במכשיר. בקר ניתוב פשוט ב-app.js.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/FRONTEND.md`
 
 **הקמה והרצה** — שלבי ההגדרה של Supabase, קונפיגורציה והרצה מקומית.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/SETUP.md`
+
+**טלגרם** — חיבור חשבון טלגרם בלחיצה (deep link + webhook) ושליחת תזכורות. שתי Edge Functions, חיבור דרך לשונית הגדרות.
+> פירוט: `Kingdom_of_Claudes_Beloved_MDs/TELEGRAM.md`
 
 ## קונפיגורציה וסביבה
 
 | פריט | מקור | הערה |
 |------|------|------|
 | `SUPABASE_URL` | `src/config.js` | מ-Project Settings -> API |
-| `SUPABASE_ANON_KEY` | `src/config.js` | מפתח ציבורי, מוגן ב-RLS |
+| `SUPABASE_ANON_KEY` | `src/config.js` | מפתח ציבורי (anon/publishable), מוגן ב-RLS |
+| Confirm email = OFF | Supabase Auth settings | חובה - ההתחברות בשם משתמש דורשת זאת |
+| `TELEGRAM_BOT_USERNAME` | `src/config.js` | ציבורי, לקישור החיבור |
+| `TELEGRAM_BOT_TOKEN` | Supabase Edge Functions Secret | סודי, לא בדפדפן |
+| `TELEGRAM_WEBHOOK_SECRET` | Supabase Edge Functions Secret | אימות קריאות ה-webhook |
 | מפתח Gemini | Edge Function (שלב הבא) | לא בדפדפן |
-| בוט טלגרם | Edge Function (שלב הבא) | לא בדפדפן |
 
 ## תלויות
 
@@ -68,4 +79,4 @@ project-root/
 | `@supabase/supabase-js@2` | לקוח Supabase (נטען מ-esm.sh, ללא שלב build) |
 
 ## מצב פיתוח
-הליבה הושלמה. בשלבים הבאים: חילוץ AI (Edge Function + Gemini), Web Push, בוט טלגרם, ותזמון בוקר דרך GitHub Actions (טריגר חיצוני יומי שמפעיל Edge Function; גם שומר את פרויקט ה-Supabase ער במסלול החינמי). לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.
+הליבה הושלמה (התחברות בשם משתמש, עיצוב מובייל). קוד הטלגרם נכתב (webhook + שליחה + ממשק חיבור) וממתין לפריסה בדאשבורד. בשלבים הבאים: חילוץ AI (Edge Function + Gemini), Web Push, ותזמון בוקר דרך GitHub Actions (טריגר חיצוני יומי שמפעיל Edge Function; גם שומר את פרויקט ה-Supabase ער במסלול החינמי). לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.

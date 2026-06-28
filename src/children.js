@@ -1,7 +1,7 @@
 // Children: data access and the "my kids" view.
 
 import { getSupabase } from "./supabaseClient.js";
-import { el, clear, toast } from "./ui.js";
+import { el, clear, toast, avatar, icon } from "./ui.js";
 
 export async function listChildren() {
   const supabase = await getSupabase();
@@ -62,16 +62,19 @@ export async function renderChildren(container) {
     if (e.key === "Enter") { e.preventDefault(); add(); }
   });
 
-  const list = el("div", {});
+  const list = el("div", { class: "stack" });
   if (kids.length === 0) {
-    list.append(el("p", { class: "empty" }, "אין ילדים עדיין. הוסף/י את הראשון."));
+    list.append(el("p", { class: "empty" }, "אין ילדים עדיין. הוסף/י את הראשון/ה."));
   }
   for (const kid of kids) {
     list.append(
       el("div", { class: "list-row" },
-        el("span", {}, kid.name),
+        el("div", { class: "row-main" },
+          avatar(kid.name, kid.id),
+          el("span", { class: "child-name" }, kid.name),
+        ),
         el("button", {
-          class: "link-btn danger",
+          class: "icon-btn danger", "aria-label": "מחיקה", title: "מחיקה",
           onClick: async () => {
             if (!confirm(`למחוק את ${kid.name}? כל התזכורות של הילד/ה יימחקו.`)) return;
             try {
@@ -81,7 +84,7 @@ export async function renderChildren(container) {
               toast("שגיאה: " + e.message, "error");
             }
           },
-        }, "מחיקה"),
+        }, icon("trash")),
       ),
     );
   }

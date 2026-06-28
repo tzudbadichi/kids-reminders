@@ -13,6 +13,17 @@ export async function getSupabase() {
   } catch (e) {
     throw new Error("CONFIG_MISSING");
   }
-  client = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
+  client = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY, {
+    auth: {
+      // Remember the device: keep the session in localStorage and refresh tokens
+      // automatically, so the user stays logged in after closing the app. Each
+      // device keeps its own session, so the same user can sign in on several devices.
+      persistSession: true,
+      autoRefreshToken: true,
+      storage: window.localStorage,
+      storageKey: "kids-reminders-auth",
+      detectSessionInUrl: false,
+    },
+  });
   return client;
 }

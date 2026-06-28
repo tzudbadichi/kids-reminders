@@ -6,6 +6,7 @@ import { getSession, signOut, renderAuth } from "./auth.js";
 import { renderToday, renderAdd } from "./reminders.js";
 import { renderChildren } from "./children.js";
 import { renderSettings } from "./settings.js";
+import { renderHelp } from "./help.js";
 
 const app = document.getElementById("app");
 
@@ -14,6 +15,7 @@ const views = {
   add: { label: "הוספה", icon: "add", render: renderAdd },
   children: { label: "ילדים", icon: "kids", render: renderChildren },
   settings: { label: "הגדרות", icon: "settings", render: renderSettings },
+  help: { label: "עזרה", icon: "help", render: (c) => Promise.resolve(renderHelp(c)) },
 };
 
 async function boot() {

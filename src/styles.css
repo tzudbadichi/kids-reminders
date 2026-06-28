@@ -303,6 +303,29 @@ textarea.field { resize: vertical; min-height: 96px; }
 .auth-msg { min-height: 20px; font-size: 14px; text-align: center; color: var(--muted); }
 .auth-msg.error-text, .error-text { color: var(--danger); }
 
+/* Help screen */
+.help-lead { color: var(--muted); margin-bottom: 16px; }
+.help-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 10px rgba(20, 20, 50, 0.04);
+}
+.help-section h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+.help-section p { margin-bottom: 8px; }
+.help-section p:last-child { margin-bottom: 0; }
+.help-section ul { list-style: disc; padding-inline-start: 22px; margin-bottom: 4px; }
+.help-section ol { list-style: decimal; padding-inline-start: 22px; margin-bottom: 4px; }
+.help-section li { margin-bottom: 6px; }
+.help-section strong { color: var(--text); }
+
 /* Setup / fatal notices */
 .setup { padding: 48px 22px; text-align: center; }
 

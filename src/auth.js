@@ -9,6 +9,7 @@
 
 import { getSupabase } from "./supabaseClient.js";
 import { el, clear, icon } from "./ui.js";
+import { renderHelp } from "./help.js";
 
 // Fixed internal domain for the synthesized login email. Not a real mailbox.
 const AUTH_DOMAIN = "kids-reminders.app";
@@ -156,6 +157,10 @@ export function renderAuth(container, onAuthed) {
         msg,
         switchBtn,
       ),
+      el("button", {
+        class: "link-btn-inline", style: "margin-top:16px",
+        onClick: () => renderHelp(container, { onBack: () => renderAuth(container, onAuthed) }),
+      }, "איך זה עובד? הסבר על האפליקציה"),
     ),
   );
   setMode("signin");

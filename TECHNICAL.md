@@ -29,7 +29,8 @@ project-root/
 │   ├── children.js           # ניהול ילדים (נתונים + מסך)
 │   ├── reminders.js          # תזכורות: הוספה + תצוגת "מה צריך להביא"
 │   ├── ai.js                 # חילוץ AI אופציונלי (קורא ל-Edge Function)
-│   ├── settings.js           # שם תצוגה + שעת התראה
+│   ├── settings.js           # שם תצוגה + שעת התראה + חיבור טלגרם + Web Push
+│   ├── help.js               # מסך עזרה/הסבר מלא (גם ממסך ההתחברות)
 │   ├── manifest.webmanifest  # הגדרות PWA
 │   ├── sw.js                 # service worker (מטמון + push לעתיד)
 │   └── config.example.js     # תבנית לקונפיגורציה (להעתיק ל-config.js)

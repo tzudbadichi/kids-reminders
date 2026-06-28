@@ -96,4 +96,4 @@ project-root/
 | `@supabase/supabase-js@2` | לקוח Supabase (נטען מ-esm.sh, ללא שלב build) |
 
 ## מצב פיתוח
-הליבה הושלמה (התחברות בשם משתמש, עיצוב מובייל). קוד הטלגרם נכתב (webhook + שליחה + ממשק חיבור) וממתין לפריסה בדאשבורד. בשלבים הבאים: חילוץ AI (Edge Function + Gemini), Web Push, ותזמון בוקר דרך GitHub Actions (טריגר חיצוני יומי שמפעיל Edge Function; גם שומר את פרויקט ה-Supabase ער במסלול החינמי). לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.
+**כל הפיצ'רים המרכזיים חיים בפרודקשן**: התחברות בשם משתמש, עיצוב מובייל, ניהול ילדים ותזכורות, התראת טלגרם אוטומטית כל בוקר (GitHub Actions cron שגם שומר את Supabase ער), חילוץ AI עם Gemini, והכל פרוס ב-GitHub Pages. נותר אופציונלי בלבד: Web Push ואייקוני PWA. לסטטוס מפורט, הכרעות, והצעד הבא ראה `Kingdom_of_Claudes_Beloved_MDs/PROJECT_STATUS.md`.

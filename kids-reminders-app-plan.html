@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תוכנית אפליקציה - תזכורות לילדים</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Arial", sans-serif;
+    background: #f4f6f9;
+    color: #2c3e50;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px 60px; }
+  header {
+    background: linear-gradient(135deg, #4a6fa5 0%, #6b8cbe 100%);
+    color: #fff;
+    padding: 48px 20px;
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  header h1 { font-size: 30px; margin-bottom: 10px; }
+  header p { font-size: 17px; opacity: 0.95; }
+  h2 {
+    font-size: 23px;
+    color: #34598c;
+    margin: 38px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #dde4ee;
+  }
+  h3 { font-size: 18px; color: #2c3e50; margin: 18px 0 8px; }
+  p { margin-bottom: 12px; }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .lead {
+    font-size: 18px;
+    background: #fff;
+    border-right: 5px solid #4a6fa5;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  ul, ol { margin: 8px 24px 14px; }
+  li { margin-bottom: 7px; }
+  .steps { counter-reset: step; list-style: none; margin: 0; }
+  .steps li {
+    position: relative;
+    padding: 14px 64px 14px 18px;
+    margin-bottom: 14px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px; height: 34px;
+    background: #4a6fa5;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  th, td { padding: 13px 16px; text-align: right; border-bottom: 1px solid #eef1f6; }
+  th { background: #34598c; color: #fff; font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .phase {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-top: 4px solid #6b8cbe;
+  }
+  .phase h3 { margin-top: 0; color: #34598c; }
+  .note {
+    background: #fff8e6;
+    border-right: 5px solid #e6a817;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .example {
+    background: #eef4fb;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-style: italic;
+    margin: 10px 0;
+  }
+  footer { text-align: center; color: #8a98aa; font-size: 14px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>אפליקציית תזכורות לילדים</h1>
+  <p>מה כל ילד צריך להביא לגן או לבית הספר - והתראה בבוקר שלא שוכחים</p>
+</header>
+
+<div class="wrap">
+
+  <div class="lead">
+    הורים מקבלים מהמורה או מהגננת הודעות ווצאפ עם דרישות יומיומיות: "מחר חולצה לבנה", "להביא חטיף ובקבוק מים". קל לשכוח. האפליקציה הזו אוספת את ההודעות, מזהה מהן בעזרת בינה מלאכותית מה צריך להביא בפועל, שומרת לכל ילד וליום הנכון, ושולחת בכל בוקר התראה מסודרת עם כל מה שצריך לאותו יום.
+  </div>
+
+  <h2>מה האפליקציה עושה - מבט מההורה</h2>
+  <div class="card">
+    <ol>
+      <li>ההורה נכנס לאפליקציה ומתחבר לחשבון האישי שלו.</li>
+      <li>בוחר את שם הילד מתוך רשימה (וכמובן יכול להוסיף ולערוך את שמות הילדים).</li>
+      <li>בוחר תאריך מתוך לוח שנה שנפתח.</li>
+      <li>מדביק את הטקסט של הודעת הווצאפ שקיבל מהמורה או הגננת.</li>
+      <li>לוחץ על כפתור, והבינה המלאכותית מזהה אוטומטית מה צריך להביא ומציגה רשימה.</li>
+      <li>ההורה מאשר או עורך את הרשימה - מוסיף, מוחק או מתקן לפי הצורך.</li>
+      <li>שומר. הפריטים נשמרים לאותו ילד ולאותו תאריך.</li>
+      <li>בכל בוקר, בשעה שההורה הגדיר (ברירת מחדל 6:30), קופצת התראה עם כל מה שצריך לאותו יום.</li>
+    </ol>
+    <div class="example">
+      דוגמה להתראת בוקר: "עוז - חולצה לבנה. לביא - חטיף ובקבוק מים קטן."
+    </div>
+  </div>
+
+  <h2>היכולת המרכזית - זיהוי אוטומטי של מה שצריך</h2>
+  <div class="card">
+    <p>הודעות מהגן ובית הספר מלאות בברכות, הסברים ופרטים שאינם רלוונטיים. ההורה לא צריך לקרוא ולסנן הכל בעצמו. הטקסט נשלח לשירות בינה מלאכותית של גוגל, שמזהה רק את הדברים שצריך לעשות או להביא בפועל, ומחזיר רשימה נקייה וקצרה.</p>
+    <p>חשוב: התוצאה תמיד חוזרת להורה לאישור ועריכה לפני השמירה. ההורה הוא מי שמחליט מה נכנס בסופו של דבר. אם בהודעה מוזכרים כמה ילדים, המערכת מנסה לשייך כל פריט לילד הנכון.</p>
+  </div>
+
+  <h2>ההתראה בבוקר</h2>
+  <div class="card">
+    <p>ההתראה מגיעה בשני ערוצים, כדי שתמיד תגיע ותהיה אמינה:</p>
+    <ul>
+      <li><strong>התראה ישירה לנייד</strong> - האפליקציה מותקנת כקיצור במסך הבית (ללא צורך בחנות אפליקציות), וההתראה קופצת כמו התראת מערכת רגילה, גם כשהאפליקציה סגורה.</li>
+      <li><strong>הודעת טלגרם</strong> - גיבוי אמין שעובד מצוין בכל מכשיר, כולל אייפון. ההודעה פשוט מגיעה כהודעת טלגרם רגילה בבוקר.</li>
+    </ul>
+    <p>כל הורה מגדיר בעצמו את שעת ההתראה ואת הערוצים שהוא רוצה להפעיל.</p>
+  </div>
+
+  <h2>מאילו רכיבים האפליקציה בנויה</h2>
+  <div class="card">
+    <table>
+      <tr><th>רכיב</th><th>תפקיד</th></tr>
+      <tr><td>ממשק האפליקציה</td><td>המסכים שההורה רואה, ניתנים להתקנה כקיצור במסך הבית</td></tr>
+      <tr><td>מסד נתונים מאובטח בענן</td><td>שומר את הילדים, התזכורות, וההגדרות - כל הורה רואה רק את הנתונים שלו</td></tr>
+      <tr><td>שירות הבינה המלאכותית (גוגל)</td><td>מזהה את הפריטים מתוך טקסט הווצאפ</td></tr>
+      <tr><td>מנגנון תזמון אוטומטי</td><td>רץ בכל בוקר ושולח את ההתראות לכל הורה</td></tr>
+    </table>
+    <p>הבחירה ברכיבים הללו נועדה לאפשר הפצה רחבה ללא עלויות שימוש כמעט, עם אבטחה מובנית והרשמת משתמשים מסודרת.</p>
+  </div>
+
+  <h2>שלבי הביצוע</h2>
+
+  <div class="phase">
+    <h3>שלב 1 - הקמת תשתית</h3>
+    <p>הקמת החשבונות והתשתית: מסד הנתונים, מערכת ההרשמה וההתחברות, חיבור לשירות הבינה המלאכותית, והקמת בוט הטלגרם.</p>
+  </div>
+  <div class="phase">
+    <h3>שלב 2 - הליבה והמסכים הבסיסיים</h3>
+    <p>התחברות לחשבון, ניהול שמות הילדים, הוספת תזכורת ידנית, ותצוגת "מה יש היום". בשלב זה האפליקציה כבר עובדת מקצה לקצה ללא הבינה המלאכותית.</p>
+  </div>
+  <div class="phase">
+    <h3>שלב 3 - זיהוי אוטומטי</h3>
+    <p>חיבור הבינה המלאכותית: הדבקת טקסט, זיהוי הפריטים, ומסך עריכה ואישור להורה.</p>
+  </div>
+  <div class="phase">
+    <h3>שלב 4 - התראות לנייד וטלגרם</h3>
+    <p>הפעלת ההתראות הישירות לנייד, חיבור בוט הטלגרם, ואפשרות לכל הורה לבחור ערוצים.</p>
+  </div>
+  <div class="phase">
+    <h3>שלב 5 - תזמון הבוקר</h3>
+    <p>המנגנון שרץ בכל בוקר, מאתר את הפריטים של היום לכל הורה, ושולח את ההתראות בשעה שהוגדרה (כולל התחשבות באזור הזמן).</p>
+  </div>
+  <div class="phase">
+    <h3>שלב 6 - ליטוש והשקה</h3>
+    <p>עיצוב, התקנה נוחה כקיצור במסך הבית, תמיכה מלאה בעברית, ובדיקות לפני הפצה.</p>
+  </div>
+
+  <h2>נקודות לתשומת לב</h2>
+  <div class="note">
+    באייפון, ההתראה הישירה לנייד עובדת רק אם האפליקציה מותקנת כקיצור במסך הבית. לכן בוט הטלגרם משמש כגיבוי אמין שעובד בכל מקרה.
+  </div>
+  <div class="note">
+    כל הורה רואה ומקבל אך ורק את הנתונים וההתראות שלו. הנתונים מופרדים ומאובטחים ברמת המשתמש.
+  </div>
+  <div class="note">
+    שעת ההתראה ניתנת להגדרה אישית. כל השעות לפי שעון ישראל, וברירת המחדל היא 6:30 בבוקר.
+  </div>
+
+  <footer>
+    מסמך תוכנית - אפליקציית תזכורות לילדים
+  </footer>
+
+</div>
+</body>
+</html>

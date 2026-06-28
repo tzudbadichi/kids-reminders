@@ -9,7 +9,7 @@
 
 ## פרטי ה-Gemini
 - Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=...`
-- מודל ברירת מחדל: `gemini-2.0-flash` (ניתן לשינוי דרך הסוד `GEMINI_MODEL`).
+- מודל ברירת מחדל: `gemini-2.5-flash` (ניתן לשינוי דרך הסוד `GEMINI_MODEL`, או `model` בגוף הבקשה לבדיקה). הערה: ל-`gemini-2.0-flash` גוגל החזירה free-tier בגודל 0 - לכן ברירת המחדל היא 2.5.
 - `generationConfig.responseMimeType = "application/json"` ו-`temperature = 0` לתשובה יציבה ומובנית. התשובה מפורסרת ל-`items`.
 
 ## סודות

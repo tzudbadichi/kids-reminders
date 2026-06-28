@@ -12,7 +12,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")!;
-const GEMINI_MODEL = Deno.env.get("GEMINI_MODEL") ?? "gemini-2.0-flash";
+const GEMINI_MODEL = Deno.env.get("GEMINI_MODEL") ?? "gemini-2.5-flash";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
@@ -43,6 +43,9 @@ Deno.serve(async (req) => {
   const text = (body.text ?? "").toString().trim();
   if (!text) return json({ items: [] });
 
+  // Model defaults to GEMINI_MODEL; body.model allows quick testing of alternatives.
+  const model = (body.model ?? "").toString().trim() || GEMINI_MODEL;
+
   const prompt = `אתה עוזר שמחלץ מתוך הודעה מהגן או מבית הספר את רשימת הפריטים שצריך להביא.
 הוראות:
 - החזר אך ורק פריטים שצריך להביא פיזית (למשל "חולצה לבנה", "בקבוק מים", "חטיף").
@@ -55,7 +58,7 @@ Deno.serve(async (req) => {
 """${text}"""`;
 
   const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
   const resp = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -45,19 +45,16 @@ Deno.serve(async (req) => {
 
   // Model defaults to GEMINI_MODEL; body.model allows quick testing of alternatives.
   const model = (body.model ?? "").toString().trim() || GEMINI_MODEL;
+  const debug = body.debug === true;
 
-  const prompt = `מתוך ההודעה שבסוף (הודעה מגן או מבית ספר), חלץ את רשימת הפריטים הפיזיים שההורה צריך לשלוח עם הילד.
-כללים:
-- חלץ אך ורק פריטים שמוזכרים בהודעה עצמה. אל תוסיף ואל תמציא פריטים.
-- אל תכלול תאריכים, ימים, שמות אירועים, הסברים או ברכות - רק את שמות הפריטים.
-- נסח כל פריט קצר וברור.
-- אם אין פריטים להביא, החזר רשימה ריקה.
-פורמט הפלט: JSON בלבד במבנה {"items": ["...", "..."]} (הסימנים "..." הם דוגמת מבנה בלבד, לא תוכן).
+  const prompt = `קראת הודעה מהגן או מבית הספר. החזר את רשימת הפריטים הפיזיים שצריך לשלוח עם הילד.
+- כלול כל פריט שההודעה מבקשת להביא (בגדים, אוכל, ציוד, חפצים וכו').
+- אל תכלול תאריכים, שעות, ימים, שמות אירועים, הסברים או ברכות - רק את שמות הפריטים.
+- כתוב כל פריט בקצרה, במילים מתוך ההודעה.
+- אם ההודעה לא מבקשת להביא שום דבר, החזר רשימה ריקה.
 
 ההודעה:
-<<<
-${text}
->>>`;
+${text}`;
 
   const url =
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
@@ -66,7 +63,15 @@ ${text}
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { responseMimeType: "application/json", temperature: 0 },
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: { items: { type: "ARRAY", items: { type: "STRING" } } },
+          required: ["items"],
+        },
+      },
     }),
   });
   if (!resp.ok) return json({ error: "gemini_failed", detail: await resp.text() }, 502);
@@ -81,5 +86,5 @@ ${text}
   } catch { /* leave empty */ }
 
   const clean = items.map((s) => String(s).trim()).filter(Boolean).slice(0, 50);
-  return json({ items: clean });
+  return json(debug ? { items: clean, raw, model } : { items: clean });
 });

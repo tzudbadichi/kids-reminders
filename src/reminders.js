@@ -5,6 +5,13 @@ import { el, clear, toast, avatar, icon } from "./ui.js";
 import { listChildren } from "./children.js";
 import { extractItems } from "./ai.js";
 
+// Text shared into the app (Android share target). Set by app.js on boot, consumed
+// once by the add view to prefill the message field.
+let pendingSharedText = null;
+export function setSharedText(text) { pendingSharedText = text; }
+function consumeSharedText() { const t = pendingSharedText; pendingSharedText = null; return t; }
+export function hasSharedText() { return !!pendingSharedText; }
+
 // Local date helpers (device is assumed to be on Israel time).
 function isoFromDate(d) {
   const z = (n) => String(n).padStart(2, "0");
@@ -148,7 +155,7 @@ export async function renderAdd(container) {
   const editor = chipEditor([]);
 
   const aiBtn = el("button", { class: "btn" }, "חלץ עם AI");
-  aiBtn.addEventListener("click", async () => {
+  async function runExtract() {
     const text = sourceText.value.trim();
     if (!text) { toast("אין טקסט לשליחה"); return; }
     aiBtn.disabled = true; aiBtn.textContent = "מחלץ...";
@@ -167,7 +174,12 @@ export async function renderAdd(container) {
     } finally {
       aiBtn.disabled = false; aiBtn.textContent = "חלץ עם AI";
     }
-  });
+  }
+  aiBtn.addEventListener("click", runExtract);
+
+  // If a WhatsApp message was shared into the app, prefill it and extract automatically.
+  const shared = consumeSharedText();
+  if (shared) sourceText.value = shared;
 
   const saveBtn = el("button", { class: "btn primary" }, "שמירה");
   saveBtn.addEventListener("click", async () => {
@@ -201,6 +213,8 @@ export async function renderAdd(container) {
     editor.element,
     saveBtn,
   );
+
+  if (shared) runExtract(); // auto-extract from shared text
 }
 
 // ---- "What to bring" view ----

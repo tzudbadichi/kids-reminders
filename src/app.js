@@ -3,12 +3,23 @@
 import { el, clear, icon } from "./ui.js";
 import { getSupabase } from "./supabaseClient.js";
 import { getSession, signOut, renderAuth } from "./auth.js";
-import { renderToday, renderAdd } from "./reminders.js";
+import { renderToday, renderAdd, setSharedText } from "./reminders.js";
 import { renderChildren } from "./children.js";
 import { renderSettings } from "./settings.js";
 import { renderHelp } from "./help.js";
 
 const app = document.getElementById("app");
+
+// Android "share to app": the share target opens the app with the shared message in
+// the query string. Capture it once, strip the query, and open the Add screen on it.
+const sharedOnLoad = (() => {
+  const p = new URLSearchParams(location.search);
+  const parts = [p.get("title"), p.get("text"), p.get("url")].filter(Boolean);
+  if (!parts.length) return false;
+  setSharedText(parts.join("\n").trim());
+  history.replaceState(null, "", location.pathname);
+  return true;
+})();
 
 const views = {
   today: { label: "היום", icon: "today", render: renderToday },
@@ -84,7 +95,7 @@ function renderShell() {
   }
 
   app.append(header, content, nav);
-  go("today");
+  go(sharedOnLoad ? "add" : "today");
 }
 
 function registerServiceWorker() {

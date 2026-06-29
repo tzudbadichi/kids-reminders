@@ -27,7 +27,10 @@
 `extractItems(text, childrenNames)` קורא ל-Edge Function בשם `extract-items` ומחזיר `{ items, date }`. במקרה של בעיה זורק שגיאה עם `.code` (`quota` / `unauthorized` / `service_unavailable` / `ai_error`), ו-`renderAdd` ממפה אותו להודעה רלוונטית בעברית. ההזנה הידנית תמיד ממשיכה לעבוד. פירוט מלא ב-`AI.md`.
 
 ## PWA
-`manifest.webmanifest` (RTL, עברית, standalone, theme צבע סגול) ו-`sw.js` (מטמון מעטפת ברשת-קודם, ומאזיני push/notificationclick מוכנים לשלב ההתראות). `index.html` כולל מטא של iOS להוספה למסך הבית וטעינת גופן Rubik. אייקונים יתווספו בשלב הליטוש.
+`manifest.webmanifest` (RTL, עברית, standalone, theme סגול, אייקונים, ו-`share_target`) ו-`sw.js` (מטמון מעטפת ברשת-קודם, ומאזיני push/notificationclick). `index.html` כולל מטא של iOS להוספה למסך הבית, אייקונים, וגופן Rubik.
+
+### שיתוף מווצאפ (Share Target)
+`manifest` מגדיר `share_target` (GET, פרמטרים title/text/url). באנדרואיד, אחרי התקנה למסך הבית, "שתף" מווצאפ פותח את האפליקציה עם הטקסט ב-query string. `app.js` קורא אותו בטעינה (`setSharedText`), מנקה את ה-URL, ופותח את לשונית "הוספה"; `renderAdd` ממלא את שדה ההודעה ומריץ אוטומטית את חילוץ ה-AI. (לא נתמך ב-iOS.)
 
 ## תלות בקונפיגורציה
 `supabaseClient.js` טוען דינמית את `config.js`; אם חסר, נזרק `CONFIG_MISSING` וה-app מציג מסך הגדרה.

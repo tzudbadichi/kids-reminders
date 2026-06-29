@@ -177,6 +177,23 @@ export async function renderAdd(container) {
   }
   aiBtn.addEventListener("click", runExtract);
 
+  // "Paste from clipboard" - the practical WhatsApp flow (copy the message -> paste here).
+  // Reads the clipboard and runs extraction in one tap. Only shown where supported.
+  const canPaste = !!(navigator.clipboard && navigator.clipboard.readText);
+  const pasteBtn = canPaste ? el("button", { class: "btn" }, "הדבק מהלוח") : null;
+  if (pasteBtn) {
+    pasteBtn.addEventListener("click", async () => {
+      try {
+        const t = await navigator.clipboard.readText();
+        if (!t || !t.trim()) { toast("הלוח ריק - העתק/י קודם הודעה בווצאפ"); return; }
+        sourceText.value = t.trim();
+        runExtract();
+      } catch (_) {
+        toast("לא ניתן לקרוא מהלוח. הדבק/י ידנית בשדה.", "error");
+      }
+    });
+  }
+
   // If a WhatsApp message was shared into the app, prefill it and extract automatically.
   const shared = consumeSharedText();
   if (shared) sourceText.value = shared;
@@ -208,7 +225,7 @@ export async function renderAdd(container) {
     el("label", { class: "lbl" }, "ילד/ה"), childSelect,
     el("label", { class: "lbl" }, "תאריך"), dateInput,
     el("label", { class: "lbl" }, "הודעת ווצאפ (לא חובה)"), sourceText,
-    el("div", { class: "row gap", style: "margin-bottom:14px" }, aiBtn),
+    el("div", { class: "row gap", style: "margin-bottom:14px" }, pasteBtn, aiBtn),
     el("label", { class: "lbl" }, "פריטים"),
     editor.element,
     saveBtn,

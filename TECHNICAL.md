@@ -24,7 +24,7 @@ project-root/
 │   ├── app.js                # בקר ראשי: אתחול, ניתוב בין מסכים, גייטינג התחברות
 │   ├── push.js               # Web Push: הרשמה/ביטול ושמירת המנוי
 │   ├── supabaseClient.js     # יצירת לקוח Supabase (טוען config.js, שומר סשן במכשיר)
-│   ├── auth.js               # התחברות בשם משתמש + סיסמה (email פנימי מסונתז)
+│   ├── auth.js               # התחברות אימייל + סיסמה + שחזור סיסמה (מסך איפוס)
 │   ├── ui.js                 # עזרי DOM: el/clear/toast, אייקוני SVG, אווטארים צבעוניים
 │   ├── children.js           # ניהול ילדים (נתונים + מסך)
 │   ├── reminders.js          # תזכורות: הוספה + תצוגת "מה צריך להביא"
@@ -59,7 +59,7 @@ project-root/
 **מסד הנתונים** — טבלאות profiles, children, reminders, push_subscriptions, notification_log, עם RLS לכל משתמש וטריגר ליצירת פרופיל אוטומטית.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/DATABASE.md`
 
-**הפרונטאנד** — PWA בעברית מובייל-פירסט (ניווט תחתון, אווטארים): התחברות בשם משתמש, ניהול ילדים, הוספת/עריכת/מחיקת תזכורת (ידני + AI אופציונלי), תצוגת היום (מאוחדת לפי ילד), מסך עזרה, ושיתוף הודעת ווצאפ מאנדרואיד (share target). הסשן נשמר במכשיר.
+**הפרונטאנד** — PWA בעברית מובייל-פירסט (ניווט תחתון, אווטארים): התחברות באימייל + שחזור סיסמה, ניהול ילדים, הוספת/עריכת/מחיקת תזכורת (ידני + AI אופציונלי), תצוגת היום (מאוחדת לפי ילד), מסך עזרה, ושיתוף הודעת ווצאפ מאנדרואיד (share target). הסשן נשמר במכשיר.
 > פירוט: `Kingdom_of_Claudes_Beloved_MDs/FRONTEND.md`
 
 **הקמה והרצה** — שלבי ההגדרה של Supabase, קונפיגורציה והרצה מקומית.
@@ -86,7 +86,8 @@ project-root/
 |------|------|------|
 | `SUPABASE_URL` | `src/config.js` | מ-Project Settings -> API |
 | `SUPABASE_ANON_KEY` | `src/config.js` | מפתח ציבורי (anon/publishable), מוגן ב-RLS |
-| Confirm email = OFF | Supabase Auth settings | חובה - ההתחברות בשם משתמש דורשת זאת |
+| Confirm email = OFF | Supabase Auth settings | חובה - כניסה מיידית אחרי הרשמה |
+| Site URL + Redirect URLs | Supabase Auth -> URL Configuration | חובה לשחזור סיסמה (כתובת ה-Pages + localhost) |
 | `TELEGRAM_BOT_USERNAME` | `src/config.js` | ציבורי, לקישור החיבור |
 | `TELEGRAM_BOT_TOKEN` | Supabase Edge Functions Secret | סודי, לא בדפדפן |
 | `TELEGRAM_WEBHOOK_SECRET` | Supabase Edge Functions Secret | אימות קריאות ה-webhook |

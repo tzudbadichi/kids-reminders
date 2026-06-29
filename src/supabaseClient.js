@@ -22,7 +22,10 @@ export async function getSupabase() {
       autoRefreshToken: true,
       storage: window.localStorage,
       storageKey: "kids-reminders-auth",
-      detectSessionInUrl: false,
+      // Process the password-recovery link when the user arrives from the email.
+      // Implicit flow so the reset link works even when opened on another device.
+      detectSessionInUrl: true,
+      flowType: "implicit",
     },
   });
   return client;

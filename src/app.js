@@ -2,7 +2,7 @@
 
 import { el, clear, icon } from "./ui.js";
 import { getSupabase } from "./supabaseClient.js";
-import { getSession, signOut, renderAuth } from "./auth.js";
+import { getSession, signOut, renderAuth, renderResetPassword } from "./auth.js";
 import { renderToday, renderAdd, setSharedText } from "./reminders.js";
 import { renderChildren } from "./children.js";
 import { renderSettings } from "./settings.js";
@@ -104,5 +104,21 @@ function registerServiceWorker() {
   }
 }
 
-boot();
+// Boot, and listen for the password-recovery link arriving from the reset email.
+async function init() {
+  let supabase;
+  try { supabase = await getSupabase(); }
+  catch (e) { boot(); return; }
+  supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      renderResetPassword(app, () => {
+        try { history.replaceState(null, "", location.pathname); } catch (_) { /* ignore */ }
+        boot();
+      });
+    }
+  });
+  boot();
+}
+
+init();
 registerServiceWorker();

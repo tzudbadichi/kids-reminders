@@ -203,6 +203,9 @@ textarea.field { resize: vertical; min-height: 96px; }
 }
 .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .card-head .child-name { font-size: 17px; font-weight: 700; color: var(--text); margin: 0; }
+.card-actions { margin-inline-start: auto; display: flex; gap: 2px; }
+.card-actions .icon-btn { width: 34px; height: 34px; }
+.card-actions .ico svg { width: 19px; height: 19px; }
 
 .items { margin: 0; padding-inline-start: 0; list-style: none; }
 .items li {
